@@ -15,7 +15,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(uniqueConstraints = {
+@Table(indexes = {
+        @Index(unique = true, columnList = "master_id, lineNumber")
+},
+        uniqueConstraints = {
         @UniqueConstraint(columnNames = {"master_id", "lineNumber"})
 })
 public class Detail {

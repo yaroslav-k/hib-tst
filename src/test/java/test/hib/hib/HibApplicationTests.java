@@ -35,12 +35,14 @@ class HibApplicationTests {
         repo.saveAndFlush(master);
         Master newMaster = repo.getOne(master.getId());
         newMaster.getDetails().toArray(new Detail[]{})[0].setText("Line1 modified");
-        newMaster.getDetails().toArray(new Detail[]{})[1].setText("Line2 modified");
+        newMaster.getDetails().remove(newMaster.getDetails().toArray(new Detail[]{})[1]);
+//        newMaster.getDetails().toArray(new Detail[]{})[1].setText("Line2 modified");
+        newMaster.getDetails().add(Detail.builder().lineNumber(2).text("Line2 newly added").build());
         newMaster.getDetails().add(Detail.builder().lineNumber(3).text("Line3 new").build());
         repo.saveAndFlush(newMaster);
         final Master one = repo.findById(newMaster.getId()).get();
         assertTrue(one.getDetails().stream().map(Detail::getText).anyMatch(s -> s.equals("Line1 modified")));
-        assertTrue(one.getDetails().stream().map(Detail::getText).anyMatch(s -> s.equals("Line2 modified")));
+        assertTrue(one.getDetails().stream().map(Detail::getText).anyMatch(s -> s.equals("Line2 newly added")));
         assertTrue(one.getDetails().stream().map(Detail::getText).anyMatch(s -> s.equals("Line3 new")));
 
     }
